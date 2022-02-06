@@ -7,7 +7,7 @@ print("**************************\n")
 code = input("Your choice ? ")
 if code == '1':
     # os.system
-    os.system('python src/Client.py')
+    import Client
 elif code == '2':
     os.system("cls")
     print("Maded By GHALBEYOU in github")

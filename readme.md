@@ -10,7 +10,7 @@ git clone ghalbeyou/discord-botter.git
 ```
 then, open the folder discord-botter and change the config in the file called **config.json** and save it. then type in console:
 ```bash
-python main.py
+python src/main.py
 ```
 
 and your done!

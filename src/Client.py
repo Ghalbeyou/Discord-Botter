@@ -1,5 +1,4 @@
 # imports
-from discord.ext.commands.bot import Bot
 from config_checker import check
 import discord
 from discord.ext import commands
@@ -13,50 +12,24 @@ async def on_ready():
 #!COMMAND SECTION
 @bot.command()
 async def help(ctx):
-    embed=discord.Embed(title="Help Command", description="Use the commans below to use this bot!", color=0x19f528)
-    embed.add_field(name=".mute", value="mutes the user usage: .mute <user> <reason> and unmute by: .unm <user>", inline=True)
-    embed.add_field(name=".games", value="play games", inline=True)
-    embed.add_field(name=".action", value="ban/kick user, usage: .action ban <user> <reason>", inline=True)
-    embed.set_footer(text="thats it! this bot is made by ghalbeyou in github: https://github.com/Ghalbeyou")
-    await ctx.send(embed=embed)
+    await ctx.send("Hello " + str(ctx.author.mention) +  " ! \nYou Can Ban users, by typing: \n`.ban <user>`\n or, kicking by: \n`.kick <user>`\n**By GHALBEYOU in github**")
 @bot.command()
 @has_permissions(manage_messages=True, manage_roles=True)
-async def mute(ctx,user: discord.Member, reason):
-    perms = ctx.channel.overwrites_for(user)
-    await ctx.channel.set_permissions(user, send_message=not perms.send_message)
-    await ctx.send("muted the " + str(user.nick) + " !")
+async def ban(ctx,user: discord.Member):
+    await user.send(content="You have been banned from " + str(ctx.guild.name) + " !",delete_after=5)
+    await ctx.send("Banned user!")
+    await user.ban()
 @bot.command()
 @has_permissions(manage_messages=True, manage_roles=True)
-async def unm(ctx, user: discord.member):
-    perms = ctx.channel.overwrites_for(user)
-    await ctx.channel.set_permissions(user, send_message=not perms.send_message)
-    await ctx.send("unmuted the user!")
-@bot.command()
-@has_permissions(manage_messages=True, manage_roles=True)
-async def action(ctx,do,user: discord.Member, reason):
-    if action == 'ban':
-        user.ban()
-        await ctx.send("BANNED USER!")
-        return
-    elif action == 'kick':
-        user.kick()
-        await ctx.send("KICKED USER!")
-        return
-    else:
-        await ctx.send("Usage: \n `.action <do> <user> <reason>`")
-        return
-# error section
-@unm.error
-async def unm_error(error, ctx):
+async def kick(ctx,user: discord.Member):
+    await user.kick()
+    await ctx.send("Kicked user!")
+@ban.error
+async def ban_error(error, ctx):
     if isinstance(error, CheckFailure):
         await bot.send_message(ctx.message.channel, "Looks like you don't have the perm.")
-@mute.error
-async def mute_error(error, ctx):
-    if isinstance(error, CheckFailure):
-        await bot.send_message(ctx.message.channel, "Looks like you don't have the perm.")
-@action.error
-@mute.error
-async def action_error(error, ctx):
+@kick.error
+async def kick_error(error, ctx):
     if isinstance(error, CheckFailure):
         await bot.send_message(ctx.message.channel, "Looks like you don't have the perm.")
 if check() == "BOT_TOKEN":
